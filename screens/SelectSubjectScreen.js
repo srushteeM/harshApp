@@ -79,14 +79,25 @@ export default class SelectSubjectScreen extends Component {
           image: "https://img.icons8.com/color/70/000000/basketball.png",
         },
       ],
-      subjects:[]
+      subjects:[],
+      done:false
     };
   }
 
   clickEventListener(item) {
 Alert.alert(item.title)
+var a=this.state.subjects
+a.push(item.title)
+this.setState({ 
+  subjects: a
+})
+console.log(this.state.subjects)
   }
-
+updateSubjectsSelected=()=>{
+  db.collection("users").doc(this.state.emailId).set({
+    selectedSubjects:this.state.subjects
+  },{merge:true})
+}
   render() {
     return (
       <View style={styles.container}>
@@ -130,6 +141,9 @@ Alert.alert(item.title)
         />
           <TouchableOpacity
                   style={[styles.buttonContainer, styles.doneButton]}
+                  onPress={()=>{ 
+                  this.updateSubjectsSelected()
+                  }}
                 >
                   <Text style={styles.doneText}>DONE</Text>
                 </TouchableOpacity>
